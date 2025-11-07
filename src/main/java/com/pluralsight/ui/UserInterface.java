@@ -1,5 +1,7 @@
 package com.pluralsight.ui;
 
+import com.pluralsight.model.Drink;
+import com.pluralsight.model.Order;
 import com.pluralsight.model.Receipt;
 import com.pluralsight.model.Sandwich;
 
@@ -20,6 +22,7 @@ public class UserInterface {
                 1) New Order
                 0) Exit
                 """);
+            System.out.print("your choice: ");
             switch (scan.nextLine()){
                 case "1" -> createOrder();
                 case "0" -> running=false;
@@ -31,6 +34,7 @@ public class UserInterface {
 
 
     public void createOrder(){
+        Order order=new Order();
         boolean running=true;
         while(running){
             System.out.println("""
@@ -40,10 +44,11 @@ public class UserInterface {
                 4) Checkout
                 0) Cancel Order
                 """);
+            System.out.print("your choice: ");
             switch (scan.nextLine()){
-                case "1"-> addSandwich();
-                case "2"-> addDrink();
-                case "3"-> addChips();
+                case "1"-> order.addSandwich(addSandwich());
+                case "2"-> order.addDrink(addDrink());
+                case "3"-> order.addChip();
                 case "4"-> checkout();
                 case "0"-> running=false;
                 default ->  System.out.println("invalid choice please try again...");
@@ -52,7 +57,7 @@ public class UserInterface {
     }
 
 
-    public void addSandwich() {
+    public Sandwich addSandwich() {
         Sandwich sandwich = new Sandwich();
 
         //Get size
@@ -88,7 +93,6 @@ public class UserInterface {
             sandwich.setExtraMeat(false);
         }
 
-
         // Get cheese
         items.clear();
         items.add("american");
@@ -105,7 +109,6 @@ public class UserInterface {
             sandwich.setExtraCheese(false);
         }
 
-
         // Get toppings
         items.clear();
         items.add("lettuce");
@@ -118,8 +121,6 @@ public class UserInterface {
         items.add("qucamole");
         items.add("mushrooms");
         sandwich.setToppings(askMultipleChoice("topping",items));
-
-
 
         // Get side
         items.clear();
@@ -139,51 +140,39 @@ public class UserInterface {
             sandwich.setSauces(askMultipleChoice("sauce",items));
         }
         System.out.println(sandwich);
+        return sandwich;
     }
 
-
-
-    public void addDrink(){
-        System.out.println("""
-                What kind of size do you prefer
-                1) Small
-                2) Medium
-                3) Large
-                """);
-        switch (scan.nextLine().toLowerCase()){
-            case "1", "small" -> {}
-            case "2", "medium" ->{}
-            case "3", "large" ->{}
-            default -> {}
-        }
+    public Drink addDrink(){
+        // Get drink
+        String size = askSingleChoice("drink",new ArrayList<>(
+                Arrays.asList("small","medium","large")));
+        return new Drink(size);
 
     }
-    public void addChips(){
 
-    }
     public void checkout(){
 
     }
 
 
-
 //    public <T> T askToCustomer(String type, ArrayList<String> items, T returnType){
 //          template
-//        //        System.out.println("""
-////            What kind of meats do you prefer?
-////            (Separate multiple types with commas)
-////            - steak
-////            - ham
-////            - salami
-////            - roast beef
-////            - chicken
-////            - bacon
-////            """);
-////        System.out.print("your choice: ");
-////        String[] meats = scan.nextLine().toLowerCase().split(",");
-////        for (String meat : meats) {
-////            sandwich.addMeat(meat.trim());
-////        }
+//                System.out.println("""
+//            What kind of meats do you prefer?
+//            (Separate multiple types with commas)
+//            - steak
+//            - ham
+//            - salami
+//            - roast beef
+//            - chicken
+//            - bacon
+//            """);
+//        System.out.print("your choice: ");
+//        String[] meats = scan.nextLine().toLowerCase().split(",");
+//        for (String meat : meats) {
+//            sandwich.addMeat(meat.trim());
+//        }
 //
 //        while(true){
 //            // Get yes/no
@@ -231,10 +220,11 @@ public class UserInterface {
 
     }
 
-    public String askSingleChoice(String type,ArrayList<String> items){
+    public String askSingleChoice(String category,ArrayList<String> items){
+        String phrase=(List.of("size","drink").contains(category)? "size":"kind of");
         while(true){
 
-            System.out.printf("What kind of %s do you prefer?\n",type);
+            System.out.printf("What %s %s do you prefer?\n",phrase,category);
             items.forEach(n-> System.out.printf("- %s\n",
                     n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase()));
             System.out.print("your choice: ");
@@ -250,10 +240,11 @@ public class UserInterface {
         }
     }
 
-    public ArrayList<String> askMultipleChoice(String type,ArrayList<String> items){
+    public ArrayList<String> askMultipleChoice(String category,ArrayList<String> items){
+        String phrase=(List.of("size","drink").contains(category)? "size":"kind of");
         while(true){
 
-            System.out.printf("What kind of %s do you prefer?\n",type);
+            System.out.printf("What %s %s do you prefer?\n",phrase,category);
             System.out.println("(Separate multiple types with commas)");
             items.forEach(n-> System.out.printf("- %s\n",
                     n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase()));
