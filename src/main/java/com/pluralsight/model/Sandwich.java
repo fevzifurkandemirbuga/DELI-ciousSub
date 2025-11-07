@@ -95,12 +95,14 @@ public class Sandwich {
 
 
         return "\n\n\n" +
+                "________________________________________________\n"+
                 size+ " size    " + bread+ " bread\n"+
                 "meats: " + displayList(meats) + (extraMeat? "  extra meat ✅ ":"") +"\n"+
                 cheese+" cheese" +  (extraCheese? "   extra cheese ✅ ":"") + "\n"+
                 "toppings: " + displayList(toppings) + "\n"+
                 "sides: " + displayList(sides) + "\n"+
                 "sauces: " + (sides.contains("sauce")? displayList(sauces):" no sauce") +
+                "\n________________________________________________"+
                 "\n\n";
     }
     public String displayList(ArrayList<String> list){
