@@ -8,11 +8,12 @@ public class Sandwich {
     private String bread;
     private ArrayList<String> meats;
     private boolean extraMeat;
-    private String cheese;
+    private ArrayList<String> cheeses;
     private boolean extraCheese;
     private ArrayList<String> toppings;
     private ArrayList<String> sauces ;
     private ArrayList<String> sides;
+    private boolean toasted;
 
     public Sandwich() {
     }
@@ -49,12 +50,12 @@ public class Sandwich {
         this.extraMeat = extraMeat;
     }
 
-    public String getCheese() {
-        return cheese;
+    public ArrayList<String> getCheeses() {
+        return cheeses;
     }
 
-    public void setCheese(String cheese) {
-        this.cheese = cheese;
+    public void setCheeses(ArrayList<String> cheeses) {
+        this.cheeses = cheeses;
     }
 
     public boolean isExtraCheese() {
@@ -89,28 +90,35 @@ public class Sandwich {
         this.sides = sides;
     }
 
+    public boolean isToasted() {
+        return toasted;
+    }
+
+    public void setToasted(boolean toasted) {
+        this.toasted = toasted;
+    }
+
     @Override
     public String toString() {
 
-
-
-        return "\n\n\n" +
-                "________________________________________________\n"+
-                size+ " size    " + bread+ " bread\n"+
-                "meats: " + displayList(meats) + (extraMeat? "  extra meat ✅ ":"") +"\n"+
-                cheese+" cheese" +  (extraCheese? "   extra cheese ✅ ":"") + "\n"+
-                "toppings: " + displayList(toppings) + "\n"+
-                "sides: " + displayList(sides) + "\n"+
-                "sauces: " + (sides.contains("sauce")? displayList(sauces):" no sauce") +
-                "\n________________________________________________"+
-                "\n\n";
+        return String.format("""
+                ________________________________________________
+                %s size    %s bread
+                meats: %s %s
+                %s: cheese %s
+                toppings: %s
+                sides: %s
+                sauces: %s
+                ________________________________________________
+                """,size,bread,displayList(meats),(extraMeat? "  extra meat ":""),
+                displayList(cheeses),(extraCheese? "   extra cheese":""),displayList(toppings),
+                displayList(sides),(sides.contains("sauce")? displayList(sauces):" no sauce"));
     }
+
     public String displayList(ArrayList<String> list){
-        String text="";
-        for(String s:list){
-            text+=s+", ";
-        }
-        text=(list!=null? text.substring(0, text.length()-2) : " ---");
+        String text=String.join(", ",list);
+
+        text=(!list.isEmpty()? text.substring(0, text.length()-2) : " ---");
         return text;
     }
 }
