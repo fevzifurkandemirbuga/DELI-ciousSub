@@ -48,8 +48,11 @@ public class UserInterface {
                 case "1"-> order.addSandwich(addSandwich());
                 case "2"-> order.addDrink(addDrink());
                 case "3"-> order.addChip(addChips());
-                case "4"-> running=checkout(order);
-                case "0"-> running=false;
+                case "4"-> {
+                    checkout(order);
+                    running=false;
+                }
+                case "0" -> running=false;
                 default ->  System.out.println("invalid choice please try again...");
             }
         }
@@ -98,10 +101,10 @@ public class UserInterface {
         items.add("provolone");
         items.add("cheddar");
         items.add("swiss");
-        sandwich.setCheese(askSingleChoice("cheese", items));
+        sandwich.setCheeses(askMultipleChoice("cheese", items));
 
         // Get extra cheese
-        if(sandwich.getCheese()!=null){
+        if(sandwich.getCheeses()!=null){
             sandwich.setExtraCheese(askYesNo("cheese"));
         }
         else{
@@ -145,7 +148,10 @@ public class UserInterface {
         // Get drink
         String size = askSingleChoice("drink",new ArrayList<>(
                 Arrays.asList("small","medium","large")));
-        return new Drink(size);
+        String flavor=askSingleChoice("flavor",new ArrayList<>(
+                Arrays.asList("water","pepsi","lemonade","dr. pepper","Sweet Tea")
+        ));
+        return new Drink(size,flavor);
 
     }
 
@@ -156,7 +162,7 @@ public class UserInterface {
         return numOfChips;
     }
 
-    public boolean checkout(Order order){
+    public void checkout(Order order){
         System.out.println(order);
         while(true){
             System.out.println("""
@@ -168,7 +174,7 @@ public class UserInterface {
                 case "1","confirm":
                     new ReceiptWriter().saveReceipt(order);
                 case "2","cancel":
-                    return false;
+                    return;
                 default:
                     System.out.println("invalid choice please try again...");
             }
@@ -254,7 +260,7 @@ public class UserInterface {
                 return choice;
             }
             else if(choice.isEmpty()){
-                return null;
+                System.out.printf("you have to choose a %s\n",category);;
             }
 
             System.out.println("Invalid choice, please try again.\n");

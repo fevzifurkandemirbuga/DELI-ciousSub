@@ -3,12 +3,19 @@ package com.pluralsight.model;
 public class Drink {
 
     private String size;
+    private String flavor;
 
-    public Drink() {
+    public Drink(String size, String flavor) {
+        this.size = size;
+        this.flavor = flavor;
     }
 
-    public Drink(String size) {
-        this.size = size;
+    public String getFlavor() {
+        return flavor;
+    }
+
+    public void setFlavor(String flavor) {
+        this.flavor = flavor;
     }
 
     public String getSize() {
@@ -21,7 +28,7 @@ public class Drink {
 
     @Override
     public String toString() {
-        return size + "size drink\n"+
+        return size + " size "+flavor+"\n"+
                 "________________________________________________\n";
     }
 }
