@@ -1,8 +1,8 @@
 package com.pluralsight.ui;
 
+import com.pluralsight.fileRepository.ReceiptWriter;
 import com.pluralsight.model.Drink;
 import com.pluralsight.model.Order;
-import com.pluralsight.model.Receipt;
 import com.pluralsight.model.Sandwich;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class UserInterface {
                 """);
             System.out.print("your choice: ");
             switch (scan.nextLine()){
-                case "1" -> createOrder();
+                case "1" -> createOrder(new Order());
                 case "0" -> running=false;
                 default -> System.out.println("invalid choice please try again...");
             }
@@ -33,8 +33,7 @@ public class UserInterface {
     }
 
 
-    public void createOrder(){
-        Order order=new Order();
+    public void createOrder(Order order){
         boolean running=true;
         while(running){
             System.out.println("""
@@ -48,8 +47,8 @@ public class UserInterface {
             switch (scan.nextLine()){
                 case "1"-> order.addSandwich(addSandwich());
                 case "2"-> order.addDrink(addDrink());
-                case "3"-> order.addChip();
-                case "4"-> checkout();
+                case "3"-> order.addChip(addChips());
+                case "4"-> running=checkout(order);
                 case "0"-> running=false;
                 default ->  System.out.println("invalid choice please try again...");
             }
@@ -71,7 +70,7 @@ public class UserInterface {
         items.clear();
         items.add("white");
         items.add("wheat");
-        items.add("wye");
+        items.add("rye");
         items.add("wrap");
         sandwich.setBread(askSingleChoice("bread", items));
 
@@ -124,12 +123,12 @@ public class UserInterface {
 
         // Get side
         items.clear();
-        items.add("aujus");
+        items.add("au jus");
         items.add("sauce");
         sandwich.setSides(askMultipleChoice("side",items));
 
         // Get sauces
-        if(sandwich.getSides().contains("sauce")){
+        if(sandwich.getSides()!=null && sandwich.getSides().contains("sauce")){
             items.clear();
             items.add("mayo");
             items.add("mustard");
@@ -139,7 +138,6 @@ public class UserInterface {
             items.add("vinaigrette");
             sandwich.setSauces(askMultipleChoice("sauce",items));
         }
-        System.out.println(sandwich);
         return sandwich;
     }
 
@@ -151,7 +149,30 @@ public class UserInterface {
 
     }
 
-    public void checkout(){
+    public int addChips(){
+        System.out.print("How many chip do you want to add?:  ");
+        int numOfChips= scan.nextInt();
+        scan.nextLine();
+        return numOfChips;
+    }
+
+    public boolean checkout(Order order){
+        System.out.println(order);
+        while(true){
+            System.out.println("""
+                1) Confirm
+                2) Cancel
+                """);
+            System.out.print("your choice: ");
+            switch (scan.nextLine().trim().toLowerCase()){
+                case "1","confirm":
+                    new ReceiptWriter().saveReceipt(order);
+                case "2","cancel":
+                    return false;
+                default:
+                    System.out.println("invalid choice please try again...");
+            }
+        }
 
     }
 
