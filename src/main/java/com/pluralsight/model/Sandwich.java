@@ -6,14 +6,15 @@ public class Sandwich extends MenuItem {
 
     private String size;
     private String bread;
+    private boolean toasted;
     private ArrayList<String> meats;
     private boolean extraMeat;
     private ArrayList<String> cheeses;
     private boolean extraCheese;
     private ArrayList<String> toppings;
-    private ArrayList<String> sauces ;
+    private ArrayList<String> sauces;
     private ArrayList<String> sides;
-    private boolean toasted;
+
 
     public Sandwich() {
     }
@@ -102,38 +103,38 @@ public class Sandwich extends MenuItem {
     public String toString() {
 
         return String.format("""
-                ________________________________________________
-                Size: %s
-                Bread: %s   %s
-                meats: %s   %s
-                cheese: %s   %s
-                toppings: %s
-                sides: %s
-                sauces: %s
-                ________________________________________________""",
+                        ________________________________________________
+                        Size: %s
+                        Bread: %s   %s
+                        meats: %s   %s
+                        cheese: %s   %s
+                        toppings: %s
+                        sides: %s
+                        sauces: %s
+                        ________________________________________________""",
                 getSize(),
                 getBread(),
-                (isToasted()? "toasted": "not toasted"),
-                (meats.isEmpty()?"no meat":displayList(meats)),
-                (extraMeat? "extra meat ":""),
-                (cheeses.isEmpty()?"no cheese":displayList(cheeses)),
-                (extraCheese? "extra cheese":""),
-                (toppings.isEmpty())?"no topping":displayList(toppings),
-                (sides.isEmpty()?"no sides":displayList(sides)),
-                (sauces.isEmpty()? "no sauce": displayList(sauces)));
+                (isToasted() ? "toasted" : "not toasted"),
+                (meats.isEmpty() ? "no meat" : displayList(meats)),
+                (extraMeat ? "extra meat " : ""),
+                (cheeses.isEmpty() ? "no cheese" : displayList(cheeses)),
+                (extraCheese ? "extra cheese" : ""),
+                (toppings.isEmpty()) ? "no topping" : displayList(toppings),
+                (sides.isEmpty() ? "no sides" : displayList(sides)),
+                (sauces.isEmpty() ? "no sauce" : displayList(sauces)));
     }
 
-    public String displayList(ArrayList<String> list){
+    public String displayList(ArrayList<String> list) {
 
-        return String.join(", ",list);
+        return String.join(", ", list);
     }
 
     @Override
     public double getTotal() {
-        double toppingPrice= meats.size() * 1.0+
-                (extraMeat ? 0.5:0)+
-                cheeses.size()*0.75+
-                (extraCheese ? 0.3:0);
+        double toppingPrice = meats.size() * 1.0 +
+                (extraMeat ? 0.5 : 0) +
+                cheeses.size() * 0.75 +
+                (extraCheese ? 0.3 : 0);
         return switch (this.size.toLowerCase()) {
             case "mini" -> 5.50 + toppingPrice;
             case "large" -> 7.00 + toppingPrice * 2;

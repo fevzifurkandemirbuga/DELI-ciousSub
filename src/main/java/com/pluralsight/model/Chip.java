@@ -1,6 +1,6 @@
 package com.pluralsight.model;
 
-public class Chip extends MenuItem{
+public class Chip extends MenuItem {
 
     private String type;
 

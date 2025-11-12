@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Order {
 
-    private final ArrayList<MenuItem> items=new ArrayList<>();
+    private final ArrayList<MenuItem> items = new ArrayList<>();
 
 
     public ArrayList<MenuItem> getItems() {
@@ -17,7 +17,7 @@ public class Order {
     }
 
 
-    public double getTotal(){
+    public double getTotal() {
 
         return items.stream()
                 .map(MenuItem::getTotal)
@@ -28,28 +28,31 @@ public class Order {
     @Override
     public String toString() {
 
-        return
-                //Sandwich
-                items.stream()
-                        .filter(i-> i instanceof Sandwich)
-                        .map(Object::toString)
-                        .reduce("",(a,b)->a+"\n"+b) +
-                //Drink
-                items.stream()
-                        .filter(i-> i instanceof Drink)
-                        .map(Object::toString)
-                        .reduce("",(a,b)->a+"\n"+b) +
-                        "________________________________________________\n"+
-                //Chip
-                items.stream()
-                        .filter(i-> i instanceof Chip)
-                        .map(i -> ((Chip) i).getType())
-                        .collect(Collectors.groupingBy(c->c,Collectors.counting()))
-                        .entrySet().stream()
-                        .map(c->c.getValue()+" "+c.getKey()+"\n")
-                        .reduce("",(a,b)->a+b) +
+        String sandwichs = items.stream()
+                .filter(i -> i instanceof Sandwich)
+                .map(Object::toString)
+                .reduce("", (a, b) -> a + "\n" + b);
 
-                "------------------------------\n" +
-                String.format("Total: $%.2f",getTotal());
+        String drinks = items.stream()
+                .filter(i -> i instanceof Drink)
+                .map(Object::toString)
+                .reduce("", (a, b) -> a + "\n" + b);
+
+        String chips = items.stream()
+                .filter(i -> i instanceof Chip)
+                .map(i -> ((Chip) i).getType())
+                .collect(Collectors.groupingBy(c -> c, Collectors.counting()))
+                .entrySet().stream()
+                .map(c -> c.getValue() + " " + c.getKey() + "\n")
+                .reduce("", (a, b) -> a + b);
+
+        return String.format("""
+                %s
+                %s
+                ------------------------------
+                %s
+                ------------------------------
+                Total: $%.2f
+                """, sandwichs, drinks, chips, getTotal());
     }
 }

@@ -11,35 +11,30 @@ import java.time.LocalTime;
 public class ReceiptWriter {
 
 
-    public  void saveReceipt(Order order){
-        String date= String.format("%d-%d-%d",
+    public void saveReceipt(Order order) {
+        String date = String.format("%d-%d-%d",
                 LocalDate.now().getYear(),
                 LocalDate.now().getMonthValue(),
                 LocalDate.now().getDayOfMonth());
 
-        String time= String.format("%d-%d-%d",
+        String time = String.format("%d.%d.%d",
                 LocalTime.now().getHour(),
                 LocalTime.now().getMinute(),
                 LocalTime.now().getSecond());
 
-        String fileName=date+" - "+time+".txt";
+        String fileName = date + " - " + time + ".txt";
 
-        try{
-            FileWriter fileWriter=new FileWriter(fileName,true);
-            BufferedWriter bw=new BufferedWriter(fileWriter);
-            bw.write(date+"  -  "+time +"\n"+ order.toString());
+        try {
+            FileWriter fileWriter = new FileWriter(fileName, true);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            bw.write(date + "  -  " + time + "\n" + order.toString());
             bw.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-
-
-
     }
-
-
 
 
 }
