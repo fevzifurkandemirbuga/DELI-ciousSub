@@ -1,6 +1,6 @@
 package com.pluralsight.model;
 
-public class Drink {
+public class Drink extends MenuItem{
 
     private String size;
     private String flavor;
@@ -28,7 +28,16 @@ public class Drink {
 
     @Override
     public String toString() {
-        return size + " size "+flavor+"\n"+
-                "________________________________________________\n";
+        return size + " size "+flavor+"\n";
+    }
+
+    @Override
+    public double getTotal() {
+        return switch (this.size.toLowerCase()){
+            case "small"->2.0;
+            case "medium"->2.5;
+            case "large"->3.0;
+            default -> throw new IllegalStateException("Unexpected value: " + this.size.toLowerCase());
+        };
     }
 }

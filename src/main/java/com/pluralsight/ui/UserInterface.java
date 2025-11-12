@@ -1,14 +1,13 @@
 package com.pluralsight.ui;
 
-import com.pluralsight.fileRepository.ReceiptWriter;
+import com.pluralsight.repository.ReceiptWriter;
+import com.pluralsight.model.Chip;
 import com.pluralsight.model.Drink;
 import com.pluralsight.model.Order;
 import com.pluralsight.model.Sandwich;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserInterface {
 
@@ -45,9 +44,9 @@ public class UserInterface {
                 """);
             System.out.print("your choice: ");
             switch (scan.nextLine()){
-                case "1"-> order.addSandwich(addSandwich());
-                case "2"-> order.addDrink(addDrink());
-                case "3"-> order.addChip(addChips());
+                case "1"-> order.addItem(addSandwich());
+                case "2"-> order.addItem(addDrink());
+                case "3"-> order.addItem(addChips());
                 case "4"-> {
                     checkout(order);
                     running=false;
@@ -63,32 +62,24 @@ public class UserInterface {
         Sandwich sandwich = new Sandwich();
 
         //Get size
-        ArrayList<String> items=new ArrayList<>();
-        items.add("mini");
-        items.add("large");
-        items.add("gaint");
-        sandwich.setSize(askSingleChoice("size",items));
+        ArrayList<String> items;
+
+        items=createOptions("Mini","Large","Giant");
+        sandwich.setSize(askSingleChoice("size bread",items));
 
         // Get bread type
-        items.clear();
-        items.add("white");
-        items.add("wheat");
-        items.add("rye");
-        items.add("wrap");
+        items=createOptions("White","Wheat","Rye","Wrap");
         sandwich.setBread(askSingleChoice("bread", items));
 
+        sandwich.setToasted(askYesNo("toasted bread"));
+
+
         // Get meats
-        items.clear();
-        items.add("steak");
-        items.add("ham");
-        items.add("salami");
-        items.add("roasted beef");
-        items.add("chicken");
-        items.add("bacon");
+        items=createOptions("Steak","Ham","Salami","Roasted beef","Chicken","Bacon");
         sandwich.setMeats(askMultipleChoice("meat",items));
 
         // Extra meat
-        if(sandwich.getMeats()!=null){
+        if(!sandwich.getMeats().isEmpty()){
             sandwich.setExtraMeat(askYesNo("meat"));
         }
         else{
@@ -96,15 +87,11 @@ public class UserInterface {
         }
 
         // Get cheese
-        items.clear();
-        items.add("american");
-        items.add("provolone");
-        items.add("cheddar");
-        items.add("swiss");
+        items=createOptions("American","Provolone","Cheddar","Swiss");
         sandwich.setCheeses(askMultipleChoice("cheese", items));
 
         // Get extra cheese
-        if(sandwich.getCheeses()!=null){
+        if(!sandwich.getCheeses().isEmpty()){
             sandwich.setExtraCheese(askYesNo("cheese"));
         }
         else{
@@ -112,54 +99,32 @@ public class UserInterface {
         }
 
         // Get toppings
-        items.clear();
-        items.add("lettuce");
-        items.add("peppers");
-        items.add("onions");
-        items.add("tomatoes");
-        items.add("jalapenos");
-        items.add("cucumbers");
-        items.add("pickles");
-        items.add("qucamole");
-        items.add("mushrooms");
+        items=createOptions("Lettuce","Peppers","Onions","Tomatoes","Jalapenos",
+                "Cucumbers","Pickles","Guacamole","Mushrooms");
         sandwich.setToppings(askMultipleChoice("topping",items));
 
+        // Get sauces
+        items=createOptions("Mayo","Mustard","Ketchup","Ranch","Thousand islands","Vinaigrette");
+        sandwich.setSauces(askMultipleChoice("sauce",items));
+
         // Get side
-        items.clear();
-        items.add("au jus");
-        items.add("sauce");
+        items=createOptions("Au jus","Sauce");
         sandwich.setSides(askMultipleChoice("side",items));
 
-        // Get sauces
-        if(sandwich.getSides()!=null && sandwich.getSides().contains("sauce")){
-            items.clear();
-            items.add("mayo");
-            items.add("mustard");
-            items.add("ketchup");
-            items.add("ranch");
-            items.add("thousand islands");
-            items.add("vinaigrette");
-            sandwich.setSauces(askMultipleChoice("sauce",items));
-        }
         return sandwich;
     }
 
     public Drink addDrink(){
         // Get drink
-        String size = askSingleChoice("drink",new ArrayList<>(
-                Arrays.asList("small","medium","large")));
-        String flavor=askSingleChoice("flavor",new ArrayList<>(
-                Arrays.asList("water","pepsi","lemonade","dr. pepper","Sweet Tea")
-        ));
+        String size = askSingleChoice("size drink",createOptions("Small","Medium","Large"));
+        String flavor=askSingleChoice("flavor",createOptions("Water","Pepsi","Lemonade","Sweet tea"));
         return new Drink(size,flavor);
-
     }
 
-    public int addChips(){
-        System.out.print("How many chip do you want to add?:  ");
-        int numOfChips= scan.nextInt();
-        scan.nextLine();
-        return numOfChips;
+    public Chip addChips(){
+        String type=askSingleChoice("chip",createOptions("Cheetos","Doritos","Ruffles"));
+
+        return new Chip(type);
     }
 
     public void checkout(Order order){
@@ -183,57 +148,10 @@ public class UserInterface {
     }
 
 
-//    public <T> T askToCustomer(String type, ArrayList<String> items, T returnType){
-//          template
-//                System.out.println("""
-//            What kind of meats do you prefer?
-//            (Separate multiple types with commas)
-//            - steak
-//            - ham
-//            - salami
-//            - roast beef
-//            - chicken
-//            - bacon
-//            """);
-//        System.out.print("your choice: ");
-//        String[] meats = scan.nextLine().toLowerCase().split(",");
-//        for (String meat : meats) {
-//            sandwich.addMeat(meat.trim());
-//        }
-//
-//        while(true){
-//            // Get yes/no
-//            if(returnType instanceof Boolean){
-//                System.out.printf("Do you want extra %s (y/n): ",type);
-//                boolean result=scan.nextLine().trim().equalsIgnoreCase("y");
-//                return (T) Boolean.valueOf(result);
-//
-//            }
-//
-//            System.out.printf("What kind of %s do you prefer?\n",type);
-//
-//            // single choice
-//            if(returnType instanceof String ){
-//
-//                items.forEach(n-> System.out.printf("- %s\n",n));
-//                System.out.print("your choice: ");
-//                String choice = scan.nextLine().trim().toLowerCase();
-//                if(items.contains(choice)){
-//                    return (T) choice;
-//                }
-//            }
-//
-//            // multiple choice
-//            else if(returnType instanceof ArrayList){
-//                System.out.println("(Separate multiple types with commas)");
-//                items.forEach(n-> System.out.printf("- %s\n",n));
-//                System.out.print("your choice: ");
-//                String[] choice = scan.nextLine().toLowerCase().split(",");
-//                return (T) Arrays.asList(choice);
-//            }
-//        }
-//
-//    }
+    public ArrayList<String> createOptions(String... options){
+
+        return new ArrayList<>(Arrays.asList(options));
+    }
 
     public boolean askYesNo(String type){
         while(true){
@@ -247,46 +165,66 @@ public class UserInterface {
 
     }
 
-    public String askSingleChoice(String category,ArrayList<String> items){
-        String phrase=(List.of("size","drink").contains(category)? "size":"kind of");
+    public String askSingleChoice(String category, ArrayList<String> items){
+        String phrase=(List.of("size bread","size drink").contains(category)? "":"kind of");
         while(true){
 
             System.out.printf("What %s %s do you prefer?\n",phrase,category);
-            items.forEach(n-> System.out.printf("- %s\n",
-                    n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase()));
+
+            items.forEach(n-> System.out.printf("- %s\n",n));
+
             System.out.print("your choice: ");
             String choice = scan.nextLine().trim().toLowerCase();
-            if(items.contains(choice)){
+
+            boolean validChoice=items.stream()
+                    .map(String::toLowerCase)
+                    .anyMatch(n->n.equalsIgnoreCase(choice));
+
+            if(validChoice){
                 return choice;
             }
             else if(choice.isEmpty()){
-                System.out.printf("you have to choose a %s\n",category);;
+                System.out.printf("you have to choose a %s, please try again.\n",category);
+                continue;
             }
 
             System.out.println("Invalid choice, please try again.\n");
         }
     }
 
-    public ArrayList<String> askMultipleChoice(String category,ArrayList<String> items){
-        String phrase=(List.of("size","drink").contains(category)? "size":"kind of");
+    public ArrayList<String> askMultipleChoice(String category, ArrayList<String> items){
+
         while(true){
 
-            System.out.printf("What %s %s do you prefer?\n",phrase,category);
+            System.out.printf("What kind of %s do you prefer?\n",category);
+            // print items
             System.out.println("(Separate multiple types with commas)");
-            items.forEach(n-> System.out.printf("- %s\n",
-                    n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase()));
+
+            items.forEach(n-> System.out.printf("- %s\n",n));
+
             System.out.print("your choice: ");
-            String[] choice = scan.nextLine().toLowerCase().split(", ");
-            ArrayList<String> result = new ArrayList<String>(Arrays.asList(choice));
-            if(items.containsAll(result)){
-                return result;
+            ArrayList<String> choice= createOptions(scan.nextLine().split(","))
+                    .stream()
+                    .map(String::trim)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+
+            boolean validChoice = choice.stream()
+                    .allMatch(s -> items.stream()
+                            .map(String::toLowerCase)
+                            .anyMatch(s::equals));
+
+            if(validChoice){
+
+                return choice;
             }
-            else if (choice.length==1){
-                return null;
+            else if (choice.get(0).isEmpty()) {
+
+                return new ArrayList<>();
             }
 
             System.out.println("Invalid choice, please try again.\n");
-
         }
     }
 }

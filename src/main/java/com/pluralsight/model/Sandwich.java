@@ -2,7 +2,7 @@ package com.pluralsight.model;
 
 import java.util.ArrayList;
 
-public class Sandwich {
+public class Sandwich extends MenuItem {
 
     private String size;
     private String bread;
@@ -103,22 +103,42 @@ public class Sandwich {
 
         return String.format("""
                 ________________________________________________
-                %s size    %s bread
-                meats: %s %s
-                %s: cheese %s
+                Size: %s
+                Bread: %s   %s
+                meats: %s   %s
+                cheese: %s   %s
                 toppings: %s
                 sides: %s
                 sauces: %s
-                ________________________________________________
-                """,size,bread,displayList(meats),(extraMeat? "  extra meat ":""),
-                displayList(cheeses),(extraCheese? "   extra cheese":""),displayList(toppings),
-                displayList(sides),(sides.contains("sauce")? displayList(sauces):" no sauce"));
+                ________________________________________________""",
+                getSize(),
+                getBread(),
+                (isToasted()? "toasted": "not toasted"),
+                (meats.isEmpty()?"no meat":displayList(meats)),
+                (extraMeat? "extra meat ":""),
+                (cheeses.isEmpty()?"no cheese":displayList(cheeses)),
+                (extraCheese? "extra cheese":""),
+                (toppings.isEmpty())?"no topping":displayList(toppings),
+                (sides.isEmpty()?"no sides":displayList(sides)),
+                (sauces.isEmpty()? "no sauce": displayList(sauces)));
     }
 
     public String displayList(ArrayList<String> list){
-        String text=String.join(", ",list);
 
-        text=(!list.isEmpty()? text.substring(0, text.length()-2) : " ---");
-        return text;
+        return String.join(", ",list);
+    }
+
+    @Override
+    public double getTotal() {
+        double toppingPrice= meats.size() * 1.0+
+                (extraMeat ? 0.5:0)+
+                cheeses.size()*0.75+
+                (extraCheese ? 0.3:0);
+        return switch (this.size.toLowerCase()) {
+            case "mini" -> 5.50 + toppingPrice;
+            case "large" -> 7.00 + toppingPrice * 2;
+            case "giant" -> 8.50 + toppingPrice * 3;
+            default -> throw new IllegalStateException("Unexpected value: " + size.toLowerCase());
+        };
     }
 }

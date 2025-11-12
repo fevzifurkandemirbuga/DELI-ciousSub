@@ -1,6 +1,6 @@
 package com.pluralsight.model;
 
-public class Chip {
+public class Chip extends MenuItem{
 
     private String type;
 
@@ -16,5 +16,8 @@ public class Chip {
         this.type = type;
     }
 
-
+    @Override
+    public double getTotal() {
+        return 1.5;
+    }
 }
