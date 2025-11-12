@@ -1,17 +1,18 @@
 package com.pluralsight.model;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Order {
     private ArrayList<Sandwich> sandwiches;
     private ArrayList<Drink> drinks;
-    private int chips;
+    private ArrayList<Chip> chips;
 
 
     public Order() {
         this.sandwiches = new ArrayList<>();
         this.drinks = new ArrayList<>();
-        this.chips = 0;
+        this.chips = new ArrayList<>();
     }
 
 
@@ -23,8 +24,8 @@ public class Order {
         this.drinks.add(drink);
     }
 
-    public void addChip(int number){
-        this.chips+=number;
+    public void addChip(Chip chip){
+        this.chips.add(chip);
     }
 
     public ArrayList<Sandwich> getSandwiches() {
@@ -35,7 +36,7 @@ public class Order {
         return drinks;
     }
 
-    public int getChips() {
+    public ArrayList<Chip> getChips() {
         return chips;
     }
 
@@ -57,7 +58,7 @@ public class Order {
             }
         }
 
-        total+= chips*1.5;
+        total+= chips.size()*1.5;
 
         return total;
 
@@ -67,12 +68,21 @@ public class Order {
     @Override
     public String toString() {
         return sandwiches.stream()
-                .map(Sandwich::toString)
-                .reduce("",(a,b)->a+b)  +
+                        .map(Sandwich::toString)
+                        .reduce("",(a,b)->a+b)  +
+
                 drinks.stream()
                         .map(Drink::toString)
                         .reduce("",(a,b)->a+b)  +
-                chips + " chip" + (chips>1 ? "s" : "") + "\n"+
+
+                chips.stream()
+                        .map(Chip::getType)
+                        .collect(Collectors.groupingBy(c->c,Collectors.counting()))
+                        .entrySet().stream()
+                        .map(c->c.getValue()+" "+c.getKey()+"\n")
+                        .reduce("",(a,b)->a+b) +
+                " ________________________________________________\n"+
+
                 String.format("Total: %.2f",getTotal());
     }
 
