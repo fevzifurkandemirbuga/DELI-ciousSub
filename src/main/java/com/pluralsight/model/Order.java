@@ -20,39 +20,39 @@ public class Order {
     public double getTotal() {
 
         return items.stream()
-                .map(MenuItem::getTotal)
-                .reduce(0.0, Double::sum);
+                .mapToDouble(MenuItem::getTotal)
+                .sum();
     }
 
 
     @Override
     public String toString() {
 
-        String sandwichs = items.stream()
+        String sandwiches = items.stream()
                 .filter(i -> i instanceof Sandwich)
                 .map(Object::toString)
-                .reduce("", (a, b) -> a + "\n" + b);
+                .collect(Collectors.joining("\n", "", ""));
 
         String drinks = items.stream()
                 .filter(i -> i instanceof Drink)
                 .map(Object::toString)
-                .reduce("", (a, b) -> a + "\n" + b);
+                .collect(Collectors.joining("\n", "","\n------------------------------"));
 
         String chips = items.stream()
                 .filter(i -> i instanceof Chip)
                 .map(i -> ((Chip) i).getType())
                 .collect(Collectors.groupingBy(c -> c, Collectors.counting()))
                 .entrySet().stream()
-                .map(c -> c.getValue() + " " + c.getKey() + "\n")
-                .reduce("", (a, b) -> a + b);
+                .map(c -> c.getValue() + " " + c.getKey())
+                .collect(Collectors.joining("\n", "", "\n------------------------------"));
+
 
         return String.format("""
-                %s
-                %s
                 ------------------------------
                 %s
-                ------------------------------
+                %s
+                %s
                 Total: $%.2f
-                """, sandwichs, drinks, chips, getTotal());
+                """, sandwiches, drinks, chips, getTotal());
     }
 }

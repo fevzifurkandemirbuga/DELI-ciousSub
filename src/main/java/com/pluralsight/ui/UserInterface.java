@@ -61,6 +61,37 @@ public class UserInterface {
 
     public Sandwich addSandwich() {
         Sandwich sandwich = new Sandwich();
+        boolean running=true;
+        while (running){
+            System.out.println("""
+                    1) BLT
+                        Large Toasted White Bread
+                        Bacon
+                        Cheddar Cheese
+                        Lettuce, Tomato
+                        Ranch
+                    2) Philly Cheese Steak
+                        Large Toasted White Bread
+                        Steak
+                        American Cheese
+                        Peppers
+                        Mayo
+                    3) Build Your Sandwich
+                    """);
+            System.out.print("your choice: ");
+            switch (scan.nextLine()){
+                case "1" :
+                    return buildBLT();
+                case "2" :
+                    return buildPhillyCheeseSteak();
+                case "3" :
+                    running=false;
+                    break;
+                default :
+                    System.out.println("invalid choice please try again...");
+            }
+
+        }
 
         //Get size
         ArrayList<String> items;
@@ -150,4 +181,30 @@ public class UserInterface {
     public ArrayList<String> createOptions(String... options) {
         return new ArrayList<>(Arrays.asList(options));
     }
+
+    public Sandwich buildBLT(){
+
+        return new Sandwich(
+                "large",
+                "white",
+                true,
+                new ArrayList<>(List.of("bacon")),
+                new ArrayList<>(List.of("cheddar")),
+                new ArrayList<>(List.of("lettuce","tomatoes")),
+                new ArrayList<>(List.of("ranch"))
+        );
+    }
+
+    public Sandwich buildPhillyCheeseSteak(){
+        return new Sandwich(
+                "large",
+                "white",
+                true,
+                new ArrayList<>(List.of("steak")),
+                new ArrayList<>(List.of("american")),
+                new ArrayList<>(List.of("peppers")),
+                new ArrayList<>(List.of("mayo"))
+        );
+    }
+
 }

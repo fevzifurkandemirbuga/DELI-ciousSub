@@ -19,6 +19,23 @@ public class Sandwich extends MenuItem {
     public Sandwich() {
     }
 
+    public Sandwich(String size, String bread, boolean toasted, ArrayList<String> meats,
+                    ArrayList<String> cheeses, ArrayList<String> toppings, ArrayList<String> sauces) {
+        this.size = size;
+        this.bread = bread;
+        this.toasted = toasted;
+        this.meats = meats;
+        this.cheeses = cheeses;
+        this.toppings = toppings;
+        this.sauces = sauces;
+        this.extraMeat=false;
+        this.extraCheese=false;
+        this.sides=new ArrayList<>();
+
+
+
+    }
+
     public String getSize() {
         return size;
     }
@@ -103,7 +120,6 @@ public class Sandwich extends MenuItem {
     public String toString() {
 
         return String.format("""
-                        ________________________________________________
                         Size: %s
                         Bread: %s   %s
                         meats: %s   %s
@@ -111,7 +127,7 @@ public class Sandwich extends MenuItem {
                         toppings: %s
                         sides: %s
                         sauces: %s
-                        ________________________________________________""",
+                        ------------------------------""",
                 getSize(),
                 getBread(),
                 (isToasted() ? "toasted" : "not toasted"),
