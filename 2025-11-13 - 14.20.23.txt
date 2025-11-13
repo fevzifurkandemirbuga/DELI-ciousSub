@@ -1,0 +1,23 @@
+2025-11-13  -  14.20.23
+------------------------------
+Size: large
+Bread: white   toasted
+meats: bacon   
+cheese: cheddar   
+toppings: lettuce, tomatoes
+sides: no sides
+sauces: ranch
+------------------------------
+Size: mini
+Bread: white   toasted
+meats: steak   extra meat 
+cheese: no cheese   
+toppings: no topping
+sides: no sides
+sauces: no sauce
+------------------------------
+
+------------------------------
+
+------------------------------
+Total: $17.50
