@@ -82,4 +82,4 @@ com.pluralsight
 ---
 
 ## UML Diagram
-![preview](DELIciousSubDiagram.png)
+![preview](UMLDiagram.png)
