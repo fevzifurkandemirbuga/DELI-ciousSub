@@ -2,7 +2,7 @@
 ##  Sandwich Ordering Application
 
 A simple, modular Java console application that allows users to create and manage sandwich orders.  
-The project demonstrates object-oriented design principles such as abstraction, inheritance, and composition —  
+The project demonstrates object-oriented design principles such as abstraction, inheritance.
 
 ---
 
