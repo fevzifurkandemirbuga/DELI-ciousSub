@@ -1,6 +1,5 @@
 package com.pluralsight.ui;
 
-import com.pluralsight.InputHandler;
 import com.pluralsight.repository.ReceiptWriter;
 import com.pluralsight.model.Chip;
 import com.pluralsight.model.Drink;

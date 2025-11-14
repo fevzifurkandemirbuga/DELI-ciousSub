@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Order {
 
-    private final ArrayList<MenuItem> items = new ArrayList<>();
+    private ArrayList<MenuItem> items = new ArrayList<>();
 
 
     public ArrayList<MenuItem> getItems() {
