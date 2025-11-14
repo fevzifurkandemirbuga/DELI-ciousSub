@@ -3,7 +3,6 @@
 
 A simple, modular Java console application that allows users to create and manage sandwich orders.  
 The project demonstrates object-oriented design principles such as abstraction, inheritance, and composition —  
-with a clean, layered architecture separating the **UI**, **business logic**, and **data persistence** layers.
 
 ---
 
@@ -82,4 +81,4 @@ com.pluralsight
 ---
 
 ## UML Diagram
-![preview](DELIciousSubDiagram.png)
+![preview](UMLDiagram.png)
